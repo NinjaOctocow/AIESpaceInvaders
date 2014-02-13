@@ -35,8 +35,7 @@ int main( int argc, char* argv[] )
 
 	AddFont("./fonts/invaders.fnt");
 
-	/*float alien1PosX = 272;
-	float alien1PosY = 456; */
+
 	//float alien1Speed = 0.08;
 	//bool isAlive = true;
 	

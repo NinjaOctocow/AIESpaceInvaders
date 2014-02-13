@@ -1,11 +1,11 @@
-﻿Build started 13/02/2014 4:13:38 PM.
+﻿Build started 13/02/2014 4:48:16 PM.
      1>Project "C:\Users\timothy.argentino\Documents\Visual Studio 2012\Projects\AIESpaceInvaders\AIE Template.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I./ /I./include/ /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"obj\\" /Fd"obj\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt source\main.cpp
          main.cpp
-     1>source\main.cpp(62): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
-     1>source\main.cpp(182): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>source\main.cpp(270): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+     1>source\main.cpp(61): warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+     1>source\main.cpp(181): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>source\main.cpp(269): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\AIE Space Invaders.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:./libs AIE_1st_Year_Framework.lib kernel32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"bin\AIE Space Invaders.pdb" /OPT:REF /OPT:ICF /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\AIE Space Invaders.lib" /MACHINE:X86 /SAFESEH obj\main.obj
          AIE_1st_Year_Framework.lib(AIE.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
@@ -38,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.65
+Time Elapsed 00:00:02.31

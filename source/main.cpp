@@ -8,8 +8,6 @@
 #include <iostream>
 #include <sstream>
 
-//Comment
-
 //The Original resolution of Space Invaders was 224 x 260 
 //For comparison the Nintendo DS has a resolution of 292 x 192
 //We're going to render this out at three times the original resolution (because we can)
@@ -20,7 +18,7 @@ enum invaderState {INVADER1, INVADER2, INVADER3, DEAD};
 
 int main( int argc, char* argv[] )
 {	
-	gameState myState = MENU;
+	gameState myGameState = MENU;
 
 	int screenWidth = 3 * 224;
 	int screenHeight = 3 * 260;
@@ -31,14 +29,16 @@ int main( int argc, char* argv[] )
 
 	int alien1 = CreateSprite("./images/invaders/invaders_1_00.png", 128, 96, false, SColour(0, 0, 255, 255));
 
-	int endGame = CreateSprite("./images/end_game.png", 500, 700, true);
+	//int endGame = CreateSprite("./images/end_game.png", 500, 700, true);
+
+	int startGame = CreateSprite("./images/start_screen.png", 500, 700, true);
 
 	AddFont("./fonts/invaders.fnt");
 
 	/*float alien1PosX = 272;
 	float alien1PosY = 456; */
-	float alien1Speed = 0.08;
-	bool isAlive = true;
+	//float alien1Speed = 0.08;
+	//bool isAlive = true;
 	
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -112,18 +112,30 @@ int main( int argc, char* argv[] )
 	////////////////////////////////////////////////////////////////////////////
 	float cannonXPos = 336 - 32;
 	float cannonYPos = 100;
-	float cannonSpeed = 0.1;
+	float cannonSpeed = 1;
 
 	bool bulletShot = false;
 	float bulletPosX = 0; 
 	float bulletPosY = 0;
-	float bulletSpeed = 0.15;
+	float bulletSpeed = 1;
 
 	do
 	{
 		SetBackgroundColour(SColour(0, 0, 0, 255));
 		ClearScreen();
 		//Sets background colour for window to black
+	if (myGameState == MENU)
+		{	
+			MoveSprite(startGame, 336, 390);
+			DrawSprite(startGame);
+
+			if (IsKeyDown(KEY_ENTER))
+			{
+				myGameState = GAME;
+			}
+		}
+		else if (myGameState == GAME)
+		{
 
 		for (int row = 0; row < numAlienRows; row++)
 		{
@@ -135,7 +147,7 @@ int main( int argc, char* argv[] )
 		}
 
 		SetFont("./fonts/invaders.fnt");
-		DrawString("Score 0", 0, 3 * 260);
+		DrawString("Score: 0", 0, 3 * 260);
 
 		MoveSprite(cannon, cannonXPos, cannonYPos);
 		DrawSprite(cannon);
@@ -144,6 +156,7 @@ int main( int argc, char* argv[] )
 		DrawSprite(alien1);
 		*/
 		
+	
 
 		if(IsKeyDown(KEY_LEFT))
 		{
@@ -260,7 +273,7 @@ int main( int argc, char* argv[] )
 				}
 			}
 		}
-
+		}
 	} while (FrameworkUpdate() == false);
 
 

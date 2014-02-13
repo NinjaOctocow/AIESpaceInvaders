@@ -6,34 +6,109 @@
 #include <assert.h>
 #include <crtdbg.h>
 #include <iostream>
+#include <sstream>
+
 
 //The Original resolution of Space Invaders was 224 x 260 
 //For comparison the Nintendo DS has a resolution of 292 x 192
 //We're going to render this out at three times the original resolution (because we can)
 
+enum gameState {MENU, GAME, END};
+enum invaderState {INVADER1, INVADER2, INVADER3, DEAD};
+
+
 int main( int argc, char* argv[] )
 {	
-	Initialise(672, 780, false, "Space Invaders!");
+	gameState myState = MENU;
+
+	int screenWidth = 3 * 224;
+	int screenHeight = 3 * 260;
+
+	Initialise(screenWidth, screenHeight, false, "Space Invaders!");
 
 	int cannon = CreateSprite("./images/cannon.png", 64, 32, false);
 
 	int alien1 = CreateSprite("./images/invaders/invaders_1_00.png", 128, 96, false, SColour(0, 0, 255, 255));
 
-	/*int alien1Anim = CreateSprite("./images/invaders_1_01.png", 128, 96, false, SColour(0, 0, 255, 255)); */
-
 	int endGame = CreateSprite("./images/end_game.png", 500, 700, true);
 
-	/*time_t timer;
-	bool animate = false;
-	float animateTime;
-	float waitTime = 1.0; */
+	AddFont("./fonts/invaders.fnt");
 
-	float alien1PosX = 272;
-	float alien1PosY = 456;
+	/*float alien1PosX = 272;
+	float alien1PosY = 456; */
 	float alien1Speed = 0.08;
 	bool isAlive = true;
+	
 
+	//////////////////////////////////////////////////////////////////////////////
+	const int numAliensPerRow = 8;
+	const int numAlienRows = 5;
 
+	int alienWidth = 32;
+	int alienHeight = 32;
+
+	int alienSprites [4][2];
+
+	float aliensXPos[numAlienRows][numAliensPerRow];
+	float aliensYPos[numAlienRows][numAliensPerRow];
+
+	invaderState alienTypes [numAlienRows][numAliensPerRow];
+
+	float alienXMargin = 48;
+	float alienYMargin = 64;
+	
+	float alienMove = 0;
+	float alienVelocity = alienWidth;
+
+	int animationFrame = 0;
+	/////////////////////////////////////////////////////////////////////////////
+	for (int row = 0; row < numAlienRows; row++)
+	{
+		for (int i = 0; i < numAliensPerRow; i++)
+		{
+			aliensXPos[row][i] = alienXMargin + i * alienWidth * 2;
+			aliensYPos[row][i] = screenHeight - alienYMargin - (row * alienHeight * 2);
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////
+	for (int row = 0; row < numAlienRows; row++)
+	{
+		for (int i = 0; i < numAliensPerRow; i++)
+		{
+			switch (row % 3)
+			{
+				case 0:
+					alienTypes[row][i] = INVADER1;
+					break;
+				case 1:
+					alienTypes[row][i] = INVADER2;
+					break;
+				case 2:
+					alienTypes[row][i] = INVADER3;
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Alien Sprite animation
+
+	alienSprites[0][0] = CreateSprite("./images/invaders/invaders_1_00.png", alienWidth, alienHeight, false);
+	alienSprites[0][1] = CreateSprite("./images/invaders/invaders_1_01.png", alienWidth, alienHeight, false);
+
+	alienSprites[1][0] = CreateSprite("./images/invaders/invaders_2_00.png", alienWidth, alienHeight, false);
+	alienSprites[1][1] = CreateSprite("./images/invaders/invaders_2_01.png", alienWidth, alienHeight, false);
+
+	alienSprites[2][0] = CreateSprite("./images/invaders/invaders_6_00.png", alienWidth, alienHeight, false);
+	alienSprites[2][1] = CreateSprite("./images/invaders/invaders_6_01.png", alienWidth, alienHeight, false);
+
+	alienSprites[3][0] = CreateSprite("./images/invaders/invaders_7_01.png", alienWidth, alienHeight, false);
+	alienSprites[3][1] = CreateSprite("./images/invaders/invaders_7_01.png", alienWidth, alienHeight, false);
+
+	////////////////////////////////////////////////////////////////////////////
 	float cannonXPos = 336 - 32;
 	float cannonYPos = 100;
 	float cannonSpeed = 0.1;
@@ -49,26 +124,25 @@ int main( int argc, char* argv[] )
 		ClearScreen();
 		//Sets background colour for window to black
 
+		for (int row = 0; row < numAlienRows; row++)
+		{
+			for (int i = 0; i < numAliensPerRow; i++)
+			{
+				MoveSprite(alienSprites[alienTypes[row][i]][animationFrame], aliensXPos[row][i], aliensYPos[row][i]);
+				DrawSprite(alienSprites[alienTypes[row][i]][animationFrame]);
+			}
+		}
+
+		SetFont("./fonts/invaders.fnt");
+		DrawString("Score 0", 0, 3 * 260);
 
 		MoveSprite(cannon, cannonXPos, cannonYPos);
 		DrawSprite(cannon);
 
-		MoveSprite(alien1, alien1PosX, alien1PosY);
+		/*MoveSprite(alien1, alien1PosX, alien1PosY);
 		DrawSprite(alien1);
-		
-		/*time(&timer);
-		//Updates timer
-
-		if(animate == false)
-		{
-			animateTime = timer + waitTime;
-		}
-		
-		if(animateTime > timer)
-		{
-			animate = true;
-		}
 		*/
+		
 
 		if(IsKeyDown(KEY_LEFT))
 		{
@@ -111,27 +185,28 @@ int main( int argc, char* argv[] )
 		}
 		//Detects if Cannon is at border edge and moves it to correspoding opposite for X axis
 
-		if(isAlive == true)
+	/*	if(isAlive == true)
 		{
-			alien1PosX = alien1PosX + alien1Speed;
+			aliensXPos[numAlienRows][numAliensPerRow] = aliensXPos[numAlienRows][numAliensPerRow] + alien1Speed;
 			
-				if(alien1PosX >= 672 - 128)
+				if(aliensXPos[numAlienRows][numAliensPerRow] >= 672 - 128)
 			{
 				alien1Speed = -alien1Speed;
-				alien1PosX + alien1Speed;
+				aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
 			}
-				else if(alien1PosX < 0)
+				else if(aliensXPos[numAlienRows][numAliensPerRow] < 0)
 			{
 				alien1Speed = -alien1Speed;
-				alien1PosX + alien1Speed;
+				aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
 			}
 
 		}
+		
 
 		
 		//Automatic Alien movement
 
-		if(bulletPosX > alien1PosX && bulletPosX < alien1PosX + 128 && bulletPosY < alien1PosY && bulletPosY > alien1PosY - 96 && bulletShot)
+		if(bulletPosX > aliensXPos[numAlienRows][numAliensPerRow] && bulletPosX < aliensXPos[numAlienRows][numAliensPerRow] + 128 && bulletPosY < aliensYPos[numAlienRows][numAliensPerRow] && bulletPosY > aliensYPos[numAlienRows][numAliensPerRow] - 96 && bulletShot)
 		{
 			DestroySprite(alien1);
 			bulletShot = false;
@@ -145,6 +220,45 @@ int main( int argc, char* argv[] )
 			DrawSprite(endGame);
 		}
 		//Shows end game screen as alien sprite is destroyed
+		*/
+
+		alienMove += GetDeltaTime();
+		if (alienMove > 0.5)
+		{
+			// Moves aliens across
+			animationFrame = (animationFrame + 1) % 2;
+			alienMove = 0;
+			alienXMargin += alienVelocity;
+			if ((alienXMargin + numAliensPerRow * alienWidth * 2 - alienWidth) > (screenWidth - alienWidth) || 
+				(alienXMargin) < (alienWidth))
+			{
+				// undoes the movement
+				alienXMargin -= alienVelocity;
+
+				alienYMargin += alienHeight;
+				alienVelocity = -alienVelocity;
+			}
+		}
+		for (int row = 0; row < numAlienRows; row++)
+		{
+			for (int i = 0; i < numAliensPerRow; i++)
+			{
+				if (alienTypes[row][i] != DEAD)
+				{
+					aliensXPos[row][i] = alienXMargin + i * alienWidth * 2;
+					aliensYPos[row][i] = screenHeight - alienYMargin - (row * alienHeight * 2);
+				}
+				else
+				{
+					// Moves dead aliens off screen
+					if (alienMove == 0)
+					{
+						aliensXPos[row][i] = screenWidth;
+						aliensYPos[row][i] = 0;
+					}
+				}
+			}
+		}
 
 	} while (FrameworkUpdate() == false);
 

@@ -38,7 +38,7 @@ int main( int argc, char* argv[] )
 
 	//float alien1Speed = 0.08;
 	//bool isAlive = true;
-	
+
 
 	//////////////////////////////////////////////////////////////////////////////////
 	const int numAliensPerRow = 8;
@@ -56,7 +56,7 @@ int main( int argc, char* argv[] )
 
 	float alienXMargin = 48;
 	float alienYMargin = 64;
-	
+
 	float alienMove = 0;
 	float alienVelocity = alienWidth;
 
@@ -77,22 +77,22 @@ int main( int argc, char* argv[] )
 		{
 			switch (row % 3)
 			{
-				case 0:
-					alienTypes[row][i] = INVADER1;
-					break;
-				case 1:
-					alienTypes[row][i] = INVADER2;
-					break;
-				case 2:
-					alienTypes[row][i] = INVADER3;
-					break;
-				default:
-					break;
+			case 0:
+				alienTypes[row][i] = INVADER1;
+				break;
+			case 1:
+				alienTypes[row][i] = INVADER2;
+				break;
+			case 2:
+				alienTypes[row][i] = INVADER3;
+				break;
+			default:
+				break;
 			}
 		}
 	}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//Alien Sprite animation
 
@@ -123,7 +123,7 @@ int main( int argc, char* argv[] )
 		SetBackgroundColour(SColour(0, 0, 0, 255));
 		ClearScreen();
 		//Sets background colour for window to black
-	if (myGameState == MENU)
+		if (myGameState == MENU)
 		{	
 			MoveSprite(startGame, 336, 390);
 			DrawSprite(startGame);
@@ -136,142 +136,142 @@ int main( int argc, char* argv[] )
 		else if (myGameState == GAME)
 		{
 
-		for (int row = 0; row < numAlienRows; row++)
-		{
-			for (int i = 0; i < numAliensPerRow; i++)
+			for (int row = 0; row < numAlienRows; row++)
 			{
-				MoveSprite(alienSprites[alienTypes[row][i]][animationFrame], aliensXPos[row][i], aliensYPos[row][i]);
-				DrawSprite(alienSprites[alienTypes[row][i]][animationFrame]);
+				for (int i = 0; i < numAliensPerRow; i++)
+				{
+					MoveSprite(alienSprites[alienTypes[row][i]][animationFrame], aliensXPos[row][i], aliensYPos[row][i]);
+					DrawSprite(alienSprites[alienTypes[row][i]][animationFrame]);
+				}
 			}
-		}
 
-		SetFont("./fonts/invaders.fnt");
-		DrawString("Score: 0", 0, 3 * 260);
+			SetFont("./fonts/invaders.fnt");
+			DrawString("Score: 0", 0, 3 * 260);
 
-		MoveSprite(cannon, cannonXPos, cannonYPos);
-		DrawSprite(cannon);
+			MoveSprite(cannon, cannonXPos, cannonYPos);
+			DrawSprite(cannon);
 
-		/*MoveSprite(alien1, alien1PosX, alien1PosY);
-		DrawSprite(alien1);
-		*/
-		
-	
+			/*MoveSprite(alien1, alien1PosX, alien1PosY);
+			DrawSprite(alien1);
+			*/
 
-		if(IsKeyDown(KEY_LEFT))
-		{
-			cannonXPos = cannonXPos - cannonSpeed;
-		}
-		else if(IsKeyDown(KEY_RIGHT))
-		{
-			cannonXPos = cannonXPos + cannonSpeed;
-		}
-		//Detects keypress for Left and Right keys
 
-		if(IsKeyDown(KEY_SPACE) && bulletShot == false)
-		{
-			
-			bulletPosX  = cannonXPos+ 32;
-			bulletPosY = cannonYPos + 20;
-			bulletShot = true;
-		}
-		// Shooting the bullet
 
-		if(bulletShot == true)
-		{
- 			DrawLine(bulletPosX, bulletPosY - 20, bulletPosX, bulletPosY);
-			bulletPosY += bulletSpeed; 
-		}
-		//Bullet Movement
+			if(IsKeyDown(KEY_LEFT))
+			{
+				cannonXPos = cannonXPos - cannonSpeed;
+			}
+			else if(IsKeyDown(KEY_RIGHT))
+			{
+				cannonXPos = cannonXPos + cannonSpeed;
+			}
+			//Detects keypress for Left and Right keys
 
-		if(bulletPosY > 800)
-			bulletShot = false;
+			if(IsKeyDown(KEY_SPACE) && bulletShot == false)
+			{
 
-		//Bullet Reset
+				bulletPosX  = cannonXPos+ 32;
+				bulletPosY = cannonYPos + 20;
+				bulletShot = true;
+			}
+			// Shooting the bullet
 
-		if(cannonXPos >= 672)
-		{
-			 cannonXPos = 0;
-		}
-		else if(cannonXPos < -50)
-		{
-			cannonXPos = 672;
-		}
-		//Detects if Cannon is at border edge and moves it to correspoding opposite for X axis
+			if(bulletShot == true)
+			{
+				DrawLine(bulletPosX, bulletPosY - 20, bulletPosX, bulletPosY);
+				bulletPosY += bulletSpeed; 
+			}
+			//Bullet Movement
 
-	/*	if(isAlive == true)
-		{
+			if(bulletPosY > 800)
+				bulletShot = false;
+
+			//Bullet Reset
+
+			if(cannonXPos >= 672)
+			{
+				cannonXPos = 0;
+			}
+			else if(cannonXPos < -50)
+			{
+				cannonXPos = 672;
+			}
+			//Detects if Cannon is at border edge and moves it to correspoding opposite for X axis
+
+			/*	if(isAlive == true)
+			{
 			aliensXPos[numAlienRows][numAliensPerRow] = aliensXPos[numAlienRows][numAliensPerRow] + alien1Speed;
-			
-				if(aliensXPos[numAlienRows][numAliensPerRow] >= 672 - 128)
+
+			if(aliensXPos[numAlienRows][numAliensPerRow] >= 672 - 128)
 			{
-				alien1Speed = -alien1Speed;
-				aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
+			alien1Speed = -alien1Speed;
+			aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
 			}
-				else if(aliensXPos[numAlienRows][numAliensPerRow] < 0)
+			else if(aliensXPos[numAlienRows][numAliensPerRow] < 0)
 			{
-				alien1Speed = -alien1Speed;
-				aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
+			alien1Speed = -alien1Speed;
+			aliensXPos[numAlienRows][numAliensPerRow] += alien1Speed;
 			}
 
-		}
-		
+			}
 
-		
-		//Automatic Alien movement
 
-		if(bulletPosX > aliensXPos[numAlienRows][numAliensPerRow] && bulletPosX < aliensXPos[numAlienRows][numAliensPerRow] + 128 && bulletPosY < aliensYPos[numAlienRows][numAliensPerRow] && bulletPosY > aliensYPos[numAlienRows][numAliensPerRow] - 96 && bulletShot)
-		{
+
+			//Automatic Alien movement
+
+			if(bulletPosX > aliensXPos[numAlienRows][numAliensPerRow] && bulletPosX < aliensXPos[numAlienRows][numAliensPerRow] + 128 && bulletPosY < aliensYPos[numAlienRows][numAliensPerRow] && bulletPosY > aliensYPos[numAlienRows][numAliensPerRow] - 96 && bulletShot)
+			{
 			DestroySprite(alien1);
 			bulletShot = false;
 			isAlive = false;
-		}
-		//Bullet collision with single alien sprite, removes alien sprite and sets alien life status to false.
+			}
+			//Bullet collision with single alien sprite, removes alien sprite and sets alien life status to false.
 
-		if(isAlive == false)
-		{	
+			if(isAlive == false)
+			{	
 			MoveSprite(endGame, 336, 390);
 			DrawSprite(endGame);
-		}
-		//Shows end game screen as alien sprite is destroyed
-		*/
-
-		alienMove += GetDeltaTime();
-		if (alienMove > 0.5)
-		{
-			// Moves aliens across
-			animationFrame = (animationFrame + 1) % 2;
-			alienMove = 0;
-			alienXMargin += alienVelocity;
-			if ((alienXMargin + numAliensPerRow * alienWidth * 2 - alienWidth) > (screenWidth - alienWidth) || 
-				(alienXMargin) < (alienWidth))
-			{
-				// undoes the movement
-				alienXMargin -= alienVelocity;
-
-				alienYMargin += alienHeight;
-				alienVelocity = -alienVelocity;
 			}
-		}
-		for (int row = 0; row < numAlienRows; row++)
-		{
-			for (int i = 0; i < numAliensPerRow; i++)
+			//Shows end game screen as alien sprite is destroyed
+			*/
+
+			alienMove += GetDeltaTime();
+			if (alienMove > 0.5)
 			{
-				if (alienTypes[row][i] != DEAD)
+				// Moves aliens across
+				animationFrame = (animationFrame + 1) % 2;
+				alienMove = 0;
+				alienXMargin += alienVelocity;
+				if ((alienXMargin + numAliensPerRow * alienWidth * 2 - alienWidth) > (screenWidth - alienWidth) || 
+					(alienXMargin) < (alienWidth))
 				{
-					aliensXPos[row][i] = alienXMargin + i * alienWidth * 2;
-					aliensYPos[row][i] = screenHeight - alienYMargin - (row * alienHeight * 2);
+					// undoes the movement
+					alienXMargin -= alienVelocity;
+
+					alienYMargin += alienHeight;
+					alienVelocity = -alienVelocity;
 				}
-				else
+			}
+			for (int row = 0; row < numAlienRows; row++)
+			{
+				for (int i = 0; i < numAliensPerRow; i++)
 				{
-					// Moves dead aliens off screen
-					if (alienMove == 0)
+					if (alienTypes[row][i] != DEAD)
 					{
-						aliensXPos[row][i] = screenWidth;
-						aliensYPos[row][i] = 0;
+						aliensXPos[row][i] = alienXMargin + i * alienWidth * 2;
+						aliensYPos[row][i] = screenHeight - alienYMargin - (row * alienHeight * 2);
+					}
+					else
+					{
+						// Moves dead aliens off screen
+						if (alienMove == 0)
+						{
+							aliensXPos[row][i] = screenWidth;
+							aliensYPos[row][i] = 0;
+						}
 					}
 				}
 			}
-		}
 		}
 	} while (FrameworkUpdate() == false);
 
